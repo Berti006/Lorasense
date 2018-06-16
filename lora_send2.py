@@ -46,13 +46,17 @@ s.setsockopt(socket.SOL_LORA, socket.SO_DR, 5)
 s.setblocking(True)
 msgCnt = 0
 jdata = '{ "node" : "Lorasense", "nodeID" : "0001", "msgID" : 0, "count" : [42 42 42]}'
+counts = [0, 0, 0]
+
+
+
 
 while True:
     print("Sending JSON data")
     pycom.rgbled(0xff0000)
     # send some data
     msgCnt = msgCnt + 1
-    jdata = '{ "node" : "Lorasense", "nodeID" : "0001", "msgID" : ' + str(msgCnt) + ', "count" : [42 42 42]}'
+    jdata = '{ "node" : "Lorasense", "nodeID" : "0001", "msgID" : ' + str(msgCnt) + ', "count" : [' + str(counts[0]) + ' ' + str(counts[1]) + ' ' + str(counts[2]) + ']}'
     print("Sending: " + jdata)
     s.setblocking(True)
     s.send(jdata)
@@ -61,7 +65,7 @@ while True:
     data = s.recv(64)
     print(data)
     pycom.rgbled(0x000000)
-    time.sleep(60)
+    time.sleep(30)
 # make the socket non-blocking
 # (because if there's no data received it will block forever...)
 s.setblocking(False)
