@@ -36,6 +36,7 @@ lora.join(activation=LoRa.OTAA, auth=(app_eui, app_key), timeout=0)
 # wait until the module has joined the network
 while not lora.has_joined():
     time.sleep(2.5)
+    lora.join(activation=LoRa.OTAA, auth=(app_eui, app_key), timeout=0)
     print('Not yet joined...')
 
 # create a LoRa socket
@@ -58,4 +59,3 @@ s.setblocking(False)
 # get any data received (if any...)
 data = s.recv(64)
 print(data)
-

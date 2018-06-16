@@ -1,9 +1,24 @@
-from network import LoRa
 import socket
 import binascii
 import struct
 import time
+import pycom
+import network
+from network import LoRa
+from network import WLAN
 
+mac = binascii.hexlify(network.LoRa().mac())
+
+
+print("*************************************")
+print("     LoraSense 0.1")
+print("")
+print("WiFi MAC: ")
+print("LORA MAC: " + mac.upper().decode('utf-8'))
+print("*************************************")
+
+pycom.heartbeat(False)
+pycom.rgbled(0x000000)
 # Initialize LoRa in LORAWAN mode.
 # Please pick the region that matches where you are using the device:
 # Asia = LoRa.AS923
@@ -32,12 +47,15 @@ s.setblocking(True)
 
 while True:
     print("Sending JSON data")
+    pycom.rgbled(0xff0000)
     # send some data
     s.setblocking(True)
-    s.send('{ "node" : "Lorasense"}')
+    s.send('{ "node" : "Lorasense", "nodeID" : "0001"}')
+    pycom.rgbled(0xff00ff)
     s.setblocking(False)
     data = s.recv(64)
     print(data)
+    pycom.rgbled(0x000000)
     time.sleep(60)
 # make the socket non-blocking
 # (because if there's no data received it will block forever...)
