@@ -2,6 +2,7 @@ from network import LoRa
 import socket
 import binascii
 import struct
+import time
 
 # Initialize LoRa in LORAWAN mode.
 # Please pick the region that matches where you are using the device:
@@ -12,7 +13,7 @@ import struct
 lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
 # create an ABP authentication params
-dev_addr = struct.unpack(">l", binascii.unhexlify('00000005'))[0]
+dev_addr = struct.unpack(">l", binascii.unhexlify('00000001'))[0]
 nwk_swkey = binascii.unhexlify('2B7E151628AED2A6ABF7158809CF4F3C')
 app_swkey = binascii.unhexlify('2B7E151628AED2A6ABF7158809CF4F3C')
 
@@ -29,9 +30,15 @@ s.setsockopt(socket.SOL_LORA, socket.SO_DR, 5)
 # (waits for the data to be sent and for the 2 receive windows to expire)
 s.setblocking(True)
 
-# send some data
-s.send(bytes([0x01, 0x02, 0x03]))
-
+while True:
+    print("Sending JSON data")
+    # send some data
+    s.setblocking(True)
+    s.send('{ "node" : "Lorasense"}')
+    s.setblocking(False)
+    data = s.recv(64)
+    print(data)
+    time.sleep(60)
 # make the socket non-blocking
 # (because if there's no data received it will block forever...)
 s.setblocking(False)
