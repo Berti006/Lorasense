@@ -2,7 +2,7 @@
 from machine import I2C
 from lsm9ds1 import LSM9DS1
 from bumpy import BumpCounter
-from lora_send2 import LoraSender
+from lora_send3 import LoraSender
 import time
 import _thread
 
