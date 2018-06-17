@@ -51,7 +51,7 @@ def lora_timer_tick(alarm):
     pycom.rgbled(0xff0000)
     # send some data
     msgCnt = msgCnt + 1
-    jdata = '{ "node" : "Lorasense", "nodeID" : "0001", "msgID" : ' + str(msgCnt) + ', "count" : [' + str(counts[0]) + ' ' + str(counts[1]) + ' ' + str(counts[2]) + ']}'
+    jdata = '[{"node":"Lorasense","nodeID":"0001","msgID": ' + str(msgCnt) + ',"count":[' + str(counts[0]) + ',' + str(counts[1]) + ',' + str(counts[2]) + ']}]'
     print("Sending: " + jdata)
     s.setblocking(True)
     try:
@@ -68,7 +68,7 @@ def lora_timer_tick(alarm):
     counts[1] = counts[2]
     counts[2] = 0
 
-lora_timer = Timer.Alarm(lora_timer_tick, 30, periodic=True)
+lora_timer = Timer.Alarm(lora_timer_tick, 60, periodic=True)
 
 # MAIN READ LOOP
 try:
